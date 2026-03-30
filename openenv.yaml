@@ -1,0 +1,10 @@
+name: support-ticket-triage
+description: Real-world customer support triage environment
+
+tasks:
+  - id: easy
+    description: classify ticket
+  - id: medium
+    description: classify + priority
+  - id: hard
+    description: full triage
