@@ -1,0 +1,20 @@
+[project]
+name = "triage-agent-env"
+version = "0.1.0"
+description = "Customer support triage OpenEnv environment"
+authors = [
+    { name="Harsh Ray" }
+]
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "pydantic",
+    "openenv-core",
+    "requests",
+    "openai"
+]
+
+[project.scripts]
+server = "server.app:main"
+[tool.openenv]
+env_module = "environment:app"
