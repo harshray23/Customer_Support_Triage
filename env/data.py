@@ -1,94 +1,73 @@
 import random
 
-def get_tickets():
-    base = [
-        {
-            "ticket_id": "1",
-            "message": "Payment failed but money deducted",
-            "tier": "pro",
-            "class": "billing",
-            "priority": "high",
-            "route": "billing_team"
-        },
-        {
-            "ticket_id": "2",
-            "message": "App crashes on login",
-            "tier": "free",
-            "class": "technical",
-            "priority": "medium",
-            "route": "tier2"
-        },
-        {
-            "ticket_id": "3",
-            "message": "My account got hacked, urgent help needed",
-            "tier": "enterprise",
-            "class": "account",
-            "priority": "urgent",
-            "route": "security_team"
-        },
-        {
-            "ticket_id": "4",
-            "message": "Refund not received after cancellation",
-            "tier": "pro",
-            "class": "billing",
-            "priority": "high",
-            "route": "billing_team"
-        },
-        {
-            "ticket_id": "5",
-            "message": "Unable to update profile information",
-            "tier": "free",
-            "class": "account",
-            "priority": "low",
-            "route": "tier1"
-        },
-        {
-            "ticket_id": "6",
-            "message": "System lagging badly during usage",
-            "tier": "pro",
-            "class": "technical",
-            "priority": "medium",
-            "route": "tier2"
-        },
-        {
-            "ticket_id": "7",
-            "message": "Double charged for subscription",
-            "tier": "enterprise",
-            "class": "billing",
-            "priority": "high",
-            "route": "billing_team"
-        },
-        {
-            "ticket_id": "8",
-            "message": "Password reset not working",
-            "tier": "free",
-            "class": "account",
-            "priority": "medium",
-            "route": "tier1"
-        },
-        {
-            "ticket_id": "9",
-            "message": "Server error while uploading files",
-            "tier": "pro",
-            "class": "technical",
-            "priority": "high",
-            "route": "tier2"
-        },
-        {
-            "ticket_id": "10",
-            "message": "Suspicious login detected",
-            "tier": "enterprise",
-            "class": "account",
-            "priority": "urgent",
-            "route": "security_team"
+tasks = [
+    {
+        "message": "Payment failed but money deducted",
+        "tier": "regular",
+        "history": "first_time",
+        "urgency": "medium",
+        "expected": {
+            "classify_as": "billing",
+            "priority": "high",   # 🔥 align with policy
+            "assign_to": "billing_team"
         }
-    ]
+    },
+    {
+        "message": "Refund not received after 5 days",
+        "tier": "premium",
+        "history": "repeated_issue",
+        "urgency": "high",
+        "expected": {
+            "classify_as": "billing",
+            "priority": "high",
+            "assign_to": "billing_team"
+        }
+    },
+    {
+        "message": "App crashes when I open dashboard",
+        "tier": "regular",
+        "history": "first_time",
+        "urgency": "low",
+        "expected": {
+            "classify_as": "technical",
+            "priority": "low",
+            "assign_to": "tech_team"
+        }
+    },
+    {
+        "message": "System down for entire company",
+        "tier": "enterprise",
+        "history": "repeated_issue",
+        "urgency": "high",
+        "expected": {
+            "classify_as": "technical",
+            "priority": "high",
+            "assign_to": "senior_team"   # 🔥 align with escalation
+        }
+    },
+    {
+        "message": "I will complain publicly if not resolved",
+        "tier": "premium",
+        "history": "angry",
+        "urgency": "high",
+        "expected": {
+            "classify_as": "billing",
+            "priority": "high",
+            "assign_to": "billing_team"
+        }
+    },
+    {
+        "message": "Feature not working properly",
+        "tier": "regular",
+        "history": "first_time",
+        "urgency": "medium",
+        "expected": {
+            "classify_as": "technical",
+            "priority": "medium",
+            "assign_to": "tech_team"
+        }
+    }
+]
 
-    # Expand dataset to 30 tickets
-    tickets = base * 3
-
-    # Shuffle but deterministic
-    random.seed(42)
-    random.shuffle(tickets)
-
-    return tickets
+def get_random_task():
+    return random.choice(tasks)

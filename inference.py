@@ -20,19 +20,54 @@ if os.getenv("HF_TOKEN"):
 env = SupportEnv()
 
 def dummy_policy(obs):
-    text = obs.message.lower()
+    text = obs["message"].lower()
+    tier = obs.get("tier", "")
+    urgency = obs.get("urgency", "")
+    history = obs.get("history", "")
 
-    if "payment" in text:
-        return Action(classify_as="billing", priority="high", assign_to="billing_team")
+    # =========================
+    # CLASSIFICATION
+    # =========================
+    if any(k in text for k in ["payment", "refund", "charged", "deducted", "money"]):
+        classify = "billing"
+    elif any(k in text for k in ["crash", "error", "down", "bug", "not working", "fails"]):
+        classify = "technical"
+    else:
+        classify = "general"
 
-    elif "crash" in text:
-        return Action(classify_as="technical", priority="medium", assign_to="tier2")
+    # =========================
+    # PRIORITY (STRICT RULES)
+    # =========================
+    if urgency == "high":
+        priority = "high"
+    elif urgency == "medium":
+        priority = "medium"
+    else:
+        priority = "low"
 
-    elif "hack" in text:
-        return Action(classify_as="account", priority="urgent", assign_to="security_team")
+    # Override for premium/enterprise
+    if tier in ["premium", "enterprise"] and priority != "high":
+        priority = "high"
 
-    return Action(classify_as="other", priority="low", assign_to="tier1")
+    # =========================
+    # ASSIGNMENT
+    # =========================
+    if classify == "billing":
+        assign = "billing_team"
+    elif classify == "technical":
+        assign = "tech_team"
+    else:
+        assign = "general_team"
 
+    # 🔥 Escalation rule (IMPORTANT)
+    if tier == "enterprise" and urgency == "high":
+        assign = "senior_team"
+
+    return {
+        "classify_as": classify,
+        "priority": priority,
+        "assign_to": assign
+    }
 def llm_policy(obs):
     if client is None:
         return dummy_policy(obs)
@@ -59,17 +94,33 @@ def llm_policy(obs):
 
 
 def run():
-    obs = env.reset()
-    total_reward = 0
-    done = False
+    from env.environment import SupportEnv
 
-    while not done:
-        action = dummy_policy(obs)
-        obs, reward, done, _ = env.step(action)
-        total_reward += reward
+    env = SupportEnv()
+    episodes = 20
+    total_score = 0
 
-    print("Final Score:", total_reward)
+    for ep in range(episodes):
+        obs = env.reset()
+        done = False
+        step_count = 0
+        episode_reward = 0
 
+        while not done:
+            action = dummy_policy(obs)
+            obs, reward, done, _ = env.step(action)
+
+            episode_reward += reward
+            step_count += 1
+
+        # ✅ normalize properly by actual steps
+        if step_count > 0:
+            episode_reward = episode_reward / step_count
+
+        total_score += episode_reward
+
+    final_score = total_score / episodes
+    print("Final Score:", final_score)
 
 if __name__ == "__main__":
     run()
