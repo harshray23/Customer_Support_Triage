@@ -1,3 +1,12 @@
+---
+title: Support Ticket Triage Environment
+emoji: 🤖
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_file: app.py
+pinned: false
+---
 # 🧠 Support Ticket Triage Environment (OpenEnv)
 
 ## 🚀 Overview
