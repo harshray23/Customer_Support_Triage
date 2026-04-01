@@ -1,73 +1,48 @@
 import random
 
-tasks = [
+TASKS = [
     {
         "message": "Payment failed but money deducted",
-        "tier": "regular",
-        "history": "first_time",
-        "urgency": "medium",
-        "expected": {
-            "classify_as": "billing",
-            "priority": "high",   # 🔥 align with policy
-            "assign_to": "billing_team"
-        }
-    },
-    {
-        "message": "Refund not received after 5 days",
-        "tier": "premium",
-        "history": "repeated_issue",
-        "urgency": "high",
-        "expected": {
-            "classify_as": "billing",
-            "priority": "high",
-            "assign_to": "billing_team"
-        }
-    },
-    {
-        "message": "App crashes when I open dashboard",
-        "tier": "regular",
-        "history": "first_time",
-        "urgency": "low",
-        "expected": {
-            "classify_as": "technical",
-            "priority": "low",
-            "assign_to": "tech_team"
-        }
-    },
-    {
-        "message": "System down for entire company",
         "tier": "enterprise",
-        "history": "repeated_issue",
         "urgency": "high",
-        "expected": {
-            "classify_as": "technical",
-            "priority": "high",
-            "assign_to": "senior_team"   # 🔥 align with escalation
-        }
+        "classify_as": "billing",
+        "priority": "high",
+        "assign_to": "billing_team"
     },
     {
-        "message": "I will complain publicly if not resolved",
-        "tier": "premium",
-        "history": "angry",
+        "message": "App crashes when I open settings",
+        "tier": "standard",
         "urgency": "high",
-        "expected": {
-            "classify_as": "billing",
-            "priority": "high",
-            "assign_to": "billing_team"
-        }
+        "classify_as": "technical",
+        "priority": "high",
+        "assign_to": "tech_team"
     },
     {
-        "message": "Feature not working properly",
-        "tier": "regular",
-        "history": "first_time",
+        "message": "Need help understanding pricing",
+        "tier": "basic",
+        "urgency": "low",
+        "classify_as": "general",
+        "priority": "low",
+        "assign_to": "general_team"
+    },
+    {
+        "message": "Refund not processed yet",
+        "tier": "enterprise",
         "urgency": "medium",
-        "expected": {
-            "classify_as": "technical",
-            "priority": "medium",
-            "assign_to": "tech_team"
-        }
+        "classify_as": "billing",
+        "priority": "medium",
+        "assign_to": "billing_team"
+    },
+    {
+        "message": "Website showing error 500",
+        "tier": "standard",
+        "urgency": "high",
+        "classify_as": "technical",
+        "priority": "high",
+        "assign_to": "tech_team"
     }
 ]
 
+
 def get_random_task():
-    return random.choice(tasks)
+    return random.choice(TASKS)

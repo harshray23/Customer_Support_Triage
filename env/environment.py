@@ -1,34 +1,39 @@
 import random
+import sys
+import os
+
+# 🔥 Fix import path
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 from .data import get_random_task
 
 
 class SupportEnv:
     def __init__(self):
         self.current_task = None
-        self.step_count = 0
-        self.max_steps = 3
+        self.steps = 0
 
     def reset(self):
         self.current_task = get_random_task()
-        self.step_count = 0
+        self.steps = 0
+        return self._get_obs()
 
+    def _get_obs(self):
         return {
             "message": self.current_task["message"],
             "tier": self.current_task["tier"],
-            "history": self.current_task["history"],
             "urgency": self.current_task["urgency"]
         }
 
     def step(self, action):
-        self.step_count += 1
+        self.steps += 1
+        gt = self.current_task
 
-        gt = self.current_task["expected"]
+        reward = 0
 
         # =========================
-        # REWARD CALCULATION
+        # REWARD LOGIC
         # =========================
-        reward = 0.0
-
         if action["classify_as"] == gt["classify_as"]:
             reward += 0.4
 
@@ -38,27 +43,12 @@ class SupportEnv:
         if action["assign_to"] == gt["assign_to"]:
             reward += 0.3
 
-        # Bonus for perfect match
-        if (
-            action["classify_as"] == gt["classify_as"]
-            and action["priority"] == gt["priority"]
-            and action["assign_to"] == gt["assign_to"]
-        ):
-            reward += 0.2
+        # =========================
+        # ENTERPRISE PENALTY
+        # =========================
+        if gt["tier"] == "enterprise" and reward < 0.5:
+            reward -= 0.2
 
-        # =========================
-        # DONE CONDITION
-        # =========================
-        done = self.step_count >= self.max_steps
+        done = True
 
-        # =========================
-        # NEXT OBSERVATION
-        # =========================
-        obs = {
-            "message": self.current_task["message"],
-            "tier": self.current_task["tier"],
-            "history": self.current_task["history"],
-            "urgency": self.current_task["urgency"]
-        }
-
-        return obs, reward, done, {}
+        return self._get_obs(), reward, done, {}
