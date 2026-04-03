@@ -6,8 +6,8 @@ app = FastAPI()
 env = SupportEnv()
 
 @app.get("/")
-def health():
-    return {"status": "ok"}
+def home():
+    return {"message": "Triage API is running 🚀"}
 
 @app.post("/reset")
 def reset():
