@@ -1,6 +1,7 @@
 [project]
 name = "triage-agent-env"
 version = "0.1.0"
+requires-python = ">=3.10"
 description = "Customer support triage OpenEnv environment"
 authors = [
     { name="Harsh Ray" }
@@ -16,5 +17,6 @@ dependencies = [
 
 [project.scripts]
 server = "server.app:main"
+
 [tool.openenv]
-env_module = "environment:app"
+env_module = "server.env.environment:app"

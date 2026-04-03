@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from env.environment import SupportEnv
-from env.models import Action
+from server.env.environment import SupportEnv
+from server.env.models import Action
 
 app = FastAPI()
 env = SupportEnv()
