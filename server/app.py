@@ -1,20 +1,17 @@
 from fastapi import FastAPI
 from server.env.environment import SupportEnv
+from fastapi.responses import HTMLResponse 
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 env = SupportEnv()
 
 # 🔥 Root route (fixes HuggingFace UI)
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def home():
-    return {
-        "message": "🚀 Triage API is running!",
-        "endpoints": {
-            "POST /reset": "Start new ticket",
-            "POST /step": "Send action"
-        }
-    }
-
+    with open("server/ui.html", "r") as f:
+        return f.read()
+    
 # 🔥 Allow GET for browser testing
 @app.get("/reset")
 def reset_get():

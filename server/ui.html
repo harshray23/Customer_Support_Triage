@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Triage AI System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        button {
+            background: #22c55e;
+            border: none;
+            padding: 12px 20px;
+            margin: 10px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #16a34a;
+        }
+
+        pre {
+            text-align: left;
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .billing { background: #ef4444; }
+        .technical { background: #3b82f6; }
+        .general { background: #a855f7; }
+    </style>
+</head>
+<body>
+
+    <h1>Triage AI System</h1>
+    <p>Multi-Agent Customer Support Classifier</p>
+
+    <div class="container">
+
+        <button onclick="resetEnv()"> New Ticket</button>
+
+        <div class="card">
+            <h3>Message</h3>
+            <p id="message">Click "New Ticket"</p>
+        </div>
+
+        <button onclick="predict()">Auto Predict</button>
+
+        <div class="card">
+            <h3>Prediction</h3>
+            <div id="tags"></div>
+            <pre id="result"></pre>
+        </div>
+
+    </div>
+
+<script>
+
+let currentMessage = "";
+const BASE_URL = window.location.origin;
+async function resetEnv() {
+    try {
+        const res = await fetch(BASE_URL + '/reset', {
+            method: 'POST'
+        });
+
+        const data = await res.json();   // ✅ THIS LINE WAS MISSING
+
+        currentMessage = data.observation.message;
+
+        document.getElementById("message").innerText = currentMessage;
+        document.getElementById("result").innerText = "";
+        document.getElementById("tags").innerHTML = "";
+
+    } catch (err) {
+        console.error("Reset Error:", err);
+        alert("Reset failed");
+    }
+}
+async function predict() {
+    try {
+        if (!currentMessage) return;
+
+        let action;
+        const text = currentMessage.toLowerCase();
+
+        if (text.includes("payment") || text.includes("refund") || text.includes("charged") || text.includes("money")) {
+            action = {"classify_as":"billing","priority":"high","assign_to":"billing_team"};
+        } else if (text.includes("error") || text.includes("login") || text.includes("crash")) {
+            action = {"classify_as":"technical","priority":"high","assign_to":"tech_team"};
+        } else {
+            action = {"classify_as":"general","priority":"low","assign_to":"support_team"};
+        }
+
+        const res = await fetch(BASE_URL + '/step', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(action)
+        });
+
+        const data = await res.json();
+
+        const pred = data.info?.feedback?.predicted || action;
+
+        document.getElementById("tags").innerHTML = `
+            <span class="tag ${pred.classify_as}">${pred.classify_as}</span>
+            <span class="tag">${pred.priority}</span>
+        `;
+
+        document.getElementById("result").innerText = JSON.stringify(data, null, 2);
+
+    } catch (err) {
+        console.error("Predict Error:", err);
+        alert("Prediction failed. Check console.");
+    }
+}
+</script>
+
+</body>
+</html>
