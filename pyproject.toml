@@ -19,4 +19,4 @@ dependencies = [
 server = "server.app:main"
 
 [tool.openenv]
-env_module = "server.env.environment:app"
+env_module = "server.app:app"
