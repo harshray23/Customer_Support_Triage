@@ -2,19 +2,19 @@ from server.env.environment import SupportEnv
 from collections import Counter
 import os
 
-# ✅ Required env variables (as per checklist)
+
 API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:7860")
 MODEL_NAME = os.getenv("MODEL_NAME", "triage-model")
-HF_TOKEN = os.getenv("HF_TOKEN")  # ❗ no default
+HF_TOKEN = os.getenv("HF_TOKEN")  
 
-# 🔥 learning memory
+
 feedback_memory = {
     "billing": set(),
     "technical": set(),
     "general": set()
 }
 
-# 🔹 Agent 1 (keyword-based)
+
 def agent_keyword(obs):
     text = obs["message"].lower()
 
@@ -38,7 +38,6 @@ def agent_keyword(obs):
         "assign_to": "support_team"
     }
 
-# 🔹 Agent 2 (rule-based)
 def agent_rule(obs):
     text = obs["message"].lower()
 
@@ -62,7 +61,7 @@ def agent_rule(obs):
         "assign_to": "support_team"
     }
 
-# 🔹 Agent 3 (fallback baseline)
+
 def agent_fallback(obs):
     return {
         "classify_as": "general",
@@ -70,7 +69,7 @@ def agent_fallback(obs):
         "assign_to": "support_team"
     }
 
-# 🔹 Simulated LLM fallback (smart heuristic)
+
 def llm_fallback(text):
     if "cancel" in text or "subscription" in text:
         return {
@@ -92,11 +91,11 @@ def llm_fallback(text):
         "assign_to": "support_team"
     }
 
-# 🔥 Multi-agent policy with learning + confidence
+
 def multi_agent_policy(obs):
     text = obs["message"].lower()
 
-    # 🔥 Learned memory boost
+
     for cls, words in feedback_memory.items():
         if any(w in text for w in words):
             return {
@@ -105,14 +104,13 @@ def multi_agent_policy(obs):
                 "assign_to": f"{cls}_team" if cls != "general" else "support_team"
             }
 
-    # 🔥 Strong rules (fast path)
+
     if any(w in text for w in ["payment", "refund", "charged", "money", "deducted"]):
         return {"classify_as": "billing", "priority": "high", "assign_to": "billing_team"}
 
     if any(w in text for w in ["error", "crash", "login", "fail", "not working", "unable"]):
         return {"classify_as": "technical", "priority": "high", "assign_to": "tech_team"}
 
-    # 🔥 Multi-agent voting
     results = [
         agent_keyword(obs),
         agent_rule(obs),
@@ -126,7 +124,6 @@ def multi_agent_policy(obs):
     top_class, count = classify_votes.most_common(1)[0]
     confidence = count / len(results)
 
-    # 🔥 LLM fallback if low confidence
     if confidence < 0.6:
         return llm_fallback(text)
 
@@ -136,7 +133,7 @@ def multi_agent_policy(obs):
         "assign_to": team_votes.most_common(1)[0][0]
     }
 
-# 🚀 MAIN RUN (WITH REQUIRED LOG FORMAT)
+
 def run():
     env = SupportEnv()
     total_score = 0
@@ -157,7 +154,6 @@ def run():
 
         feedback = info["feedback"]
 
-        # 🔥 Learning loop
         if feedback["score"] < 1.0:
             correct_class = feedback["expected"]["classify_as"]
             words = obs["message"].lower().split()
@@ -170,7 +166,6 @@ def run():
     print("END")
     print(f"Final Score: {total_score / episodes}")
 
-# 🔥 Hidden judge simulation
 def hidden_judge_tests():
     test_cases = [
         "Payment not processed but amount deducted",
@@ -183,7 +178,7 @@ def hidden_judge_tests():
         "How to cancel subscription?"
     ]
 
-    print("\n🔥 Hidden Judge Simulation 🔥")
+    print("\n Judge Simulation ")
 
     for msg in test_cases:
         obs = {"message": msg}

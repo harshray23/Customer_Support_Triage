@@ -16,7 +16,6 @@ class SupportEnv:
 
         score = 0.0
 
-        # 🎯 Weighted scoring
         if action.get("classify_as") == gt["classify_as"]:
             score += 0.5
         if action.get("priority") == gt["priority"]:

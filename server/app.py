@@ -6,13 +6,12 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 env = SupportEnv()
 
-# 🔥 Root route (fixes HuggingFace UI)
 @app.get("/", response_class=HTMLResponse)
 def home():
     with open("server/ui.html", "r") as f:
         return f.read()
     
-# 🔥 Allow GET for browser testing
+
 @app.get("/reset")
 def reset_get():
     obs = env.reset()
@@ -23,7 +22,6 @@ def reset():
     obs = env.reset()
     return {"observation": obs}
 
-# 🔥 Allow GET for testing step (optional)
 @app.get("/step")
 def step_get():
     return {
