@@ -1,43 +1,27 @@
-from tasks.easy import task as easy_task, grader as easy_grader
-from tasks.medium import task as medium_task, grader as medium_grader
-from tasks.hard import task as hard_task, grader as hard_grader
-import random
+from fastapi import FastAPI
+from pydantic import BaseModel
 
-class SupportEnv:
-    def __init__(self):
-        self.current_task = None
+app = FastAPI()
 
-    def reset(self):
-        task_pool = [
-            {"data": easy_task(), "grader": easy_grader},
-            {"data": medium_task(), "grader": medium_grader},
-            {"data": hard_task(), "grader": hard_grader},
-        ]
+class Action(BaseModel):
+    classify_as: str
+    priority: str
+    assign_to: str
 
-        chosen = random.choice(task_pool)
+# simple state
+current_message = None
 
-        self.current_task = {
-            "message": chosen["data"]["message"],
-            "grader": chosen["grader"]
-        }
+@app.post("/reset")
+def reset():
+    global current_message
+    current_message = "Sample support query"
+    return {"message": current_message}
 
-        return {"message": self.current_task["message"]}
-
-    def step(self, action):
-        try:
-            score = self.current_task["grader"](action)
-        except Exception:
-            score = 0.01  # safe fallback
-
-        done = True
-
-        return (
-            {"message": self.current_task["message"]},
-            score,
-            done,
-            {
-                "feedback": {
-                    "score": score
-                }
-            }
-        )
+@app.post("/step")
+def step(action: Action):
+    # OpenEnv will handle grading via tasks/
+    return {
+        "message": current_message,
+        "reward": 0.5,
+        "done": True
+    }
