@@ -1,5 +1,5 @@
-from env.grader import grade
-from env.data import get_random_task
+from server.env.grader import grade
+from server.env.data import get_random_task
 
 class SupportEnv:
     def __init__(self):
