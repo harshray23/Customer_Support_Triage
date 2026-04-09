@@ -1,12 +1,19 @@
 from server.env.grader import grade
-from server.env.data import get_random_task
+from tasks.easy import task as easy_task
+from tasks.medium import task as medium_task
+from tasks.hard import task as hard_task
+import random
 
 class SupportEnv:
     def __init__(self):
         self.current_task = None
 
     def reset(self):
-        self.current_task = get_random_task()
+        self.current_task = random.choice([
+            easy_task(),
+            medium_task(),
+            hard_task()
+        ])
         return {"message": self.current_task["message"]}
 
     def step(self, action):
