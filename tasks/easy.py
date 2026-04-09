@@ -1,5 +1,6 @@
 def get_task():
     return {
+        "id": "easy",
         "message": "How to change password?",
         "expected": {
             "classify_as": "general",

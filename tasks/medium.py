@@ -1,5 +1,6 @@
 def get_task():
     return {
+        "id": "medium",
         "message": "Refund not received after cancellation",
         "expected": {
             "classify_as": "billing",
