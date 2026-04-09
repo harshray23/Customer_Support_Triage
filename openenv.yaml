@@ -4,7 +4,15 @@ description: Real-world customer support triage environment
 tasks:
   - id: easy
     module: tasks.easy
+    entrypoint: task
+    grader: grader
+
   - id: medium
     module: tasks.medium
+    entrypoint: task
+    grader: grader
+
   - id: hard
     module: tasks.hard
+    entrypoint: task
+    grader: grader
