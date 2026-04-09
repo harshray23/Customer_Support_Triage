@@ -1,10 +1,10 @@
 name: support-ticket-triage
 description: Real-world customer support triage environment
-env: server.env.environment:SupportEnv
+
 tasks:
   - id: easy
-    description: classify ticket
+    module: tasks.easy
   - id: medium
-    description: classify + priority
+    module: tasks.medium
   - id: hard
-    description: full triage
+    module: tasks.hard
