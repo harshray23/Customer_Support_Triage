@@ -1,22 +1,19 @@
 def grade(predicted, expected):
-    score = 0
+    score = 0.0
 
-    # classification
-    if predicted["classify_as"] == expected["classify_as"]:
+    if predicted.get("classify_as") == expected.get("classify_as"):
         score += 0.4
 
-    # priority
-    if predicted["priority"] == expected["priority"]:
+    if predicted.get("priority") == expected.get("priority"):
         score += 0.3
 
-    # assignment
-    if predicted["assign_to"] == expected["assign_to"]:
+    if predicted.get("assign_to") == expected.get("assign_to"):
         score += 0.3
 
-    # 🔥 normalize to avoid 0 and 1
-    if score == 0:
-        return 0.05   # instead of 0
-    if score == 1:
-        return 0.95   # instead of 1
+    # 🚨 FORCE STRICT RANGE (MOST IMPORTANT)
+    if score <= 0:
+        return 0.01
+    if score >= 1:
+        return 0.99
 
     return score
