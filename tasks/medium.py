@@ -1,13 +1,13 @@
 def task():
     return {
-        "message": "How to change password?"
+        "message": "Refund not received after cancellation"
     }
 
 def grader(predicted):
     expected = {
-        "classify_as": "general",
-        "priority": "low",
-        "assign_to": "support_team"
+        "classify_as": "billing",
+        "priority": "high",
+        "assign_to": "billing_team"
     }
 
     score = 0.0
