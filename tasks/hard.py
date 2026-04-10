@@ -1,27 +1,25 @@
 def task():
     return {
-        "message": "App crashes and payment failed"
+        "message": "App crashes when I try to login",
+        "expected": {
+            "classify_as": "technical",
+            "priority": "high",
+            "assign_to": "tech_team"
+        }
     }
 
-def grader(predicted):
-    expected = {
-        "classify_as": "technical",
-        "priority": "high",
-        "assign_to": "tech_team"
-    }
+
+def grader(output, expected=None):
+    if expected is None:
+        return 0.5
 
     score = 0.0
 
-    if predicted.get("classify_as") == expected["classify_as"]:
+    if output.get("classify_as") == expected["classify_as"]:
         score += 0.4
-    if predicted.get("priority") == expected["priority"]:
+    if output.get("priority") == expected["priority"]:
         score += 0.3
-    if predicted.get("assign_to") == expected["assign_to"]:
+    if output.get("assign_to") == expected["assign_to"]:
         score += 0.3
 
-    if score <= 0:
-        return 0.01
-    if score >= 1:
-        return 0.99
-
-    return score
+    return max(0.01, min(score, 0.99))
