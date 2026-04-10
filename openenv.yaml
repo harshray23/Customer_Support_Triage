@@ -1,4 +1,4 @@
-name: support-ticket-triage
+name: triage-env
 
 tasks:
   - id: easy
