@@ -1,4 +1,4 @@
-def task():
+def get_task():
     return {
         "input": {
             "message": "App crashes when I try to login"
@@ -9,6 +9,8 @@ def task():
             "assign_to": "tech_team"
         }
     }
+
+task = get_task
 
 
 def grader(output, expected_output=None):

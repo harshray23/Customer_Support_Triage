@@ -1,4 +1,4 @@
-def task():
+def get_task():
     return {
         "input": {
             "message": "How to change password?"
@@ -9,6 +9,9 @@ def task():
             "assign_to": "support_team"
         }
     }
+
+# backward compatibility
+task = get_task
 
 
 def grader(output, expected_output=None):

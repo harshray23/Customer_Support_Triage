@@ -1,5 +1,4 @@
-
-def task():
+def get_task():
     return {
         "input": {
             "message": "Payment failed but money deducted"
@@ -10,6 +9,8 @@ def task():
             "assign_to": "billing_team"
         }
     }
+
+task = get_task
 
 
 def grader(output, expected_output=None):
