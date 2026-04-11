@@ -3,15 +3,15 @@ name: triage-env
 tasks:
   - id: easy
     module: tasks.easy
-    entrypoint: task
+    entrypoint: get_task
     grader: grader
 
   - id: medium
     module: tasks.medium
-    entrypoint: task
+    entrypoint: get_task
     grader: grader
 
   - id: hard
     module: tasks.hard
-    entrypoint: task
+    entrypoint: get_task
     grader: grader
