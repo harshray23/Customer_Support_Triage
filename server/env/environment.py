@@ -1,5 +1,5 @@
 import random
-from server.env.data import get_random_task
+from tasks.data import get_random_task
 
 
 class SupportEnv:
