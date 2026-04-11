@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from server.env.environment import SupportEnv
 
 app = FastAPI()
+@app.get("/")
+def home():
+    return {"message": "Triage API is running 🚀"}
 
 @app.get("/health")
 def health():
