@@ -1,5 +1,7 @@
 import random
-from tasks.data import get_random_task
+from tasks.easy import get_task as easy_task
+from tasks.medium import get_task as medium_task
+from tasks.hard import get_task as hard_task
 
 
 class SupportEnv:
@@ -7,7 +9,11 @@ class SupportEnv:
         self.current_task = None
 
     def reset(self):
-        self.current_task = get_random_task()
+        self.current_task = random.choice([
+            easy_task(),
+            medium_task(),
+            hard_task()
+        ])
         return self.current_task["input"]
 
     def step(self, action):
