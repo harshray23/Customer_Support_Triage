@@ -5,16 +5,13 @@ tasks:
     module: tasks.easy
     entrypoint: get_task
     grader: grader
-    expected_output_key: expected_output   # ✅ ADD THIS
 
   - id: medium
     module: tasks.medium
     entrypoint: get_task
     grader: grader
-    expected_output_key: expected_output   # ✅ ADD THIS
 
   - id: hard
     module: tasks.hard
     entrypoint: get_task
     grader: grader
-    expected_output_key: expected_output   # ✅ ADD THIS
