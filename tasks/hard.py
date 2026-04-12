@@ -1,21 +1,20 @@
 def get_task():
     return {
         "input": {
-            "message": "App crashes when I try to login after update"
+            "message": "How do I change my account email?"
         },
         "expected_output": {
-            "classify_as": "technical",
-            "priority": "high",
-            "assign_to": "tech_team"
+            "classify_as": "general",
+            "priority": "low",
+            "assign_to": "support_team"
         }
     }
 
-
-def grader(output, expected_output=None):
-    if expected_output is None:
-        return 0.5  # fallback safety
-
+def grader(output, expected_output):
     score = 0.0
+
+    if not isinstance(output, dict):
+        return 0.01
 
     if output.get("classify_as") == expected_output["classify_as"]:
         score += 0.4
@@ -24,5 +23,4 @@ def grader(output, expected_output=None):
     if output.get("assign_to") == expected_output["assign_to"]:
         score += 0.3
 
-    # 🚨 MUST NOT be 0 or 1
     return max(0.01, min(score, 0.99))
