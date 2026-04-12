@@ -6,7 +6,7 @@ import sys
 import os
 
 sys.path.append(os.getcwd())
-# ✅ MUST use EXACT env vars
+sys.path.insert(0, os.getcwd())
 API_BASE_URL = os.environ["API_BASE_URL"]
 API_KEY = os.environ["API_KEY"]
 
