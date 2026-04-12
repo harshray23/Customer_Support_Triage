@@ -17,5 +17,5 @@ server = "server.app:main"
 packages = ["tasks", "server"]
 
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
