@@ -23,4 +23,5 @@ def grader(output, expected_output):
     if output.get("assign_to") == expected_output["assign_to"]:
         score += 0.3
 
+    # ✅ THIS LINE WAS MISSING
     return max(0.01, min(score, 0.99))
