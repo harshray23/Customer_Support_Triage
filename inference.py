@@ -2,7 +2,10 @@ import os
 import json
 import urllib.request
 from openai import OpenAI
+import sys
+import os
 
+sys.path.append(os.getcwd())
 # ✅ MUST use EXACT env vars
 API_BASE_URL = os.environ["API_BASE_URL"]
 API_KEY = os.environ["API_KEY"]
